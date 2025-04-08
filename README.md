@@ -269,4 +269,68 @@
       3. row: là hàng hiện tại (bắt đầu từ 1)
       4. col_frist: trả về true nếu là cột đầu tiên
       5. col_last: trả về true nếu là cột cuối cùng
-9. `paginate`: 
+9. `paginate`: chia tách phần tử trong mảng sang nhiều trang.
+   1. Do for loops giới hạn 50 iterations trên page, nên cần dùng `paginate` để lặp nhiều hơn 50 phần tử
+   2. 🧩 Cú pháp
+
+      ```liquid
+            {% paginate collection.products by 12 %}
+            {% for product in collection.products %}
+               {{ product.title }}
+            {% endfor %}
+
+            <div>
+               {% if paginate.previous %}
+                  <a href="{{ paginate.previous.url }}">Previous</a>
+               {% endif %}
+
+               Page {{ paginate.current_page }} of {{ paginate.pages }}
+
+               {% if paginate.next %}
+                  <a href="{{ paginate.next.url }}">Next</a>
+               {% endif %}
+            </div>
+            {% endpaginate %}
+
+            {%comment%}
+               📖 Giải thích:
+               collection.products: Đây là mảng bạn muốn phân trang.
+
+               by 12: Số phần tử mỗi trang (tuỳ bạn muốn).
+
+               {% paginate ... %} bắt đầu phần paginate.
+
+               {% endpaginate %} kết thúc paginate.
+
+               Bên trong bạn dùng vòng for để hiển thị item trên mỗi trang.
+            {%endcomment%}
+
+         ```
+
+   3. Các thuộc tính của `pagiante`
+
+      | Thuộc tính               | Giải thích                    |
+      |--------------------------|-------------------------------|
+      | `paginate.items`         | Tổng số item trong collection |
+      | `paginate.pages`         | Tổng số trang                 |
+      | `paginate.current_pages` | Trang hiện tại                |
+      | `paginate.previous`      | Thông tin trang trước(nếu có) |
+      | `pagiante.previous.url`  | URL của trang trước           |
+      | `pagiante.next`          | Thông tin trang sau(nếu có)   |
+      | `paginate.next.url`      | URL của trang sau             |
+
+### Template
+
+1. comment
+2. echo: để thay cho `{{}}`. Giúp in ra dữ liệu
+3. liquid: để viết nhiều lệnh liquid `trong 1 khối`, giúp code gọn hàng hơn so với việc mở nhiều `{% %}`.
+4. raw: dùng để hiện thị mã liquid như `văn bản`, không bị xử lý
+
+### Theme tags
+
+1. content_for: giúp `ghi nội dung vào một vùng placeholder`, để chèn vào chỗ khác trong theme layout, giúp `render các vùng block hoặc group block động` trong template `sectioned theme`.
+2. Hai loại type:
+         | Type     | Mô tả                                                                         |
+         |----------|-------------------------------------------------------------------------------|
+         | `blocks` | Render `nhiều block` từ vùng template hoặc `section group`                    |
+         | `block`  | Render `1 block duy nhất`, hay dùng khi bạn đang loop qua block trong section |
